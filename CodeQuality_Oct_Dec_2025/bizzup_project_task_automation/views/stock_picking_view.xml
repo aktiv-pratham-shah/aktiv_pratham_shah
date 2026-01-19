@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_picking_form_hide_partner_internal" model="ir.ui.view">
+        <field name="name">stock.picking.form.hide.partner.internal</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Hide partner field for Internal Transfers -->
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="invisible">picking_type_code == 'internal'</attribute>
+            </xpath>
+
+            <!-- Hide the entire label container to remove 'Contact ?' -->
+            <xpath expr="//div[contains(@class, 'o_td_label')]" position="attributes">
+                <attribute name="invisible">picking_type_code == 'internal'</attribute>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

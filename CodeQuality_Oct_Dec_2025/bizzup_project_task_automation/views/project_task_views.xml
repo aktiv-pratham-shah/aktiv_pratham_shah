@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Project Task Form View - Add Boolean Flags -->
+    <record id="view_task_form_inherit_auto_dates" model="ir.ui.view">
+        <field name="name">project.task.form.inherit.auto.dates</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <!-- Add automation flags in a dedicated group -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Automation" name="automation_settings">
+                    <group>
+                        <group string="Automatic Date Updates" name="auto_date_settings">
+                            <field name="is_auto_purchasing_task"/>
+                            <field name="is_auto_production_task"/>
+                            <field name="is_auto_delivery_task"/>
+                        </group>
+                        <group string="Information">
+                            <div class="alert alert-info" role="alert">
+                                <p><strong>How it works:</strong></p>
+                                <ul>
+                                    <li><strong>Purchasing:</strong> Dates sync with Purchase Orders linked to project's analytic account</li>
+                                    <li><strong>Production:</strong> Dates sync with Manufacturing Orders linked to project's analytic account</li>
+                                    <li><strong>Delivery:</strong> Dates sync with Delivery Orders linked to project's analytic account</li>
+                                </ul>
+                                <p><em>Start Date = Earliest order date | End Date = Latest order date</em></p>
+                            </div>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Project Task Tree View - Show Boolean Flags -->
+    <record id="view_task_tree_inherit_auto_dates" model="ir.ui.view">
+        <field name="name">project.task.tree.inherit.auto.dates</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_deadline']" position="after">
+                <field name="is_auto_purchasing_task" optional="hide" widget="boolean_toggle"/>
+                <field name="is_auto_production_task" optional="hide" widget="boolean_toggle"/>
+                <field name="is_auto_delivery_task" optional="hide" widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Project Task Search View - Add Filters -->
+    <record id="view_task_search_inherit_auto_dates" model="ir.ui.view">
+        <field name="name">project.task.search.inherit.auto.dates</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='my_tasks']" position="after">
+                <separator/>
+                <filter string="Auto Purchasing Tasks" name="auto_purchasing" 
+                        domain="[('is_auto_purchasing_task', '=', True)]"/>
+                <filter string="Auto Production Tasks" name="auto_production" 
+                        domain="[('is_auto_production_task', '=', True)]"/>
+                <filter string="Auto Delivery Tasks" name="auto_delivery" 
+                        domain="[('is_auto_delivery_task', '=', True)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
