@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="vender_bill_ascii_report_wizard_form" model="ir.ui.view">
+            <field name="name">vender.bill.ascii.reort.wizard.form</field>
+            <field name="model">vender.bill.ascii.reort.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Vender Bill ASCII Report">
+                    <group>
+                        <group>
+                            <field name="company_id" invisible="1"/>
+                            <field name="filtered_vendor_ids" invisible="1"/>
+                            <field name="start_date" required="1"/>
+                            <field name="end_date" required="1"/>
+                            <field name="report_type" required="1"/>
+                            <field name="masav_no_id" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="vendor_ids" widget="many2many_tags" invisible="report_type != 'vendor'"
+                                   options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <!--                        <button string="Print Report" type="object" class="btn-secondary" name="action_print_ascii_report" />-->
+                        <button type="object" name="print_text_report_from_button"
+                                class="btn btn-primary o_mrp_text_report">Print Text(without space)
+                        </button>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="print_excl_ascii_report_view" model="ir.ui.view">
+            <field name="name">print.excel.ascii.report.form</field>
+            <field name="model">print.excel.ascii.report</field>
+            <field name="arch" type="xml">
+                <form>
+                    <b>
+                        <h4>Click on the report file name to download the file.</h4>
+                    </b>
+                    <br/>
+                    <group>
+                        <field name="file" readonly="1" filename="file_name"/>
+                        <field name="file_name" invisible="1"/>
+                        <!--                        <field name="file1" readonly="1" filename="file_name1"/>-->
+                        <!--                        <field name="file_name1" invisible="1"/>-->
+
+                    </group>
+                    <footer>
+                        <!--                        <button type="object" name="print_text_report" class="btn btn-primary o_mrp_text_report">Print Text</button>-->
+                        <button string="Close" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_vender_bill_ascii_report_wizard" model="ir.actions.act_window">
+            <field name="name">Vender Bill ASCII Report</field>
+            <field name="res_model">vender.bill.ascii.reort.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <menuitem id="ascii_report" name="ASCII Report" parent="account.menu_finance_entries"
+                  action="action_vender_bill_ascii_report_wizard"/>
+    </data>
+</odoo>
+

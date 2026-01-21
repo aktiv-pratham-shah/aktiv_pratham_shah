@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!--
+This is a text report please check if you are update or
+move to new line then this is effect in text file.
+-->
+<template t-name="vander_bill_ascii_report.vendorbill_text_report_text1"><t t-raw="a[0]"/><t t-foreach="a[1]" t-as="line">
+<t t-raw="line"/></t>
+<t t-esc="a[2]"/>
+<t t-esc="a[3]"/>
+</template>
+
+
+        <record id="vendorbill_text_report_id" model="ir.actions.report">
+            <field name="name">Vendor Bill Text Report</field>
+            <field name="model">vender.bill.ascii.reort.wizard</field>
+            <field name="report_type">qweb-text</field>
+            <field name="report_name">vander_bill_ascii_report.vendorbill_text_report_text1</field>
+            <field name="report_file">vander_bill_ascii_report.vendorbill_text_report_text1</field>
+<!--            <field name="binding_model_id" ref="model_account_move"/>-->
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>
