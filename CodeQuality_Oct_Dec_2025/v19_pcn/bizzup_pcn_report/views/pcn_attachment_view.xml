@@ -1,0 +1,26 @@
+<!-- views/pcn_attachment_views.xml -->
+<odoo>
+    <record id="view_pcn_attachment_list" model="ir.ui.view">
+        <field name="name">pcn.attachment.list</field>
+        <field name="model">pcn.attachment</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0">
+                <field name="printing_date"/>
+                <field name="printed_by"/>
+                <field name="pcn_filename" column_invisible="1"/>
+                <field name="pcn_file" widget="binary" filename="pcn_filename"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_pcn_attachment" model="ir.actions.act_window">
+        <field name="name">PCN Attachments</field>
+        <field name="res_model">pcn.attachment</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_pcn_attachment"
+              name="PCN Attachments"
+              action="action_pcn_attachment"
+              parent="account.account_reports_legal_statements_menu"/>
+</odoo>

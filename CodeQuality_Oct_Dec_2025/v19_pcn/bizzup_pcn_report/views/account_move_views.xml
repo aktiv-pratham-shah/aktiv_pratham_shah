@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_move_form_inherit_for_pcn" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.for.pcn</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_shipping_id']" position="after">
+                <field name="is_pcn" groups="base.group_no_one"/>
+                <field name="run_date" readonly="1" />
+                <field name="pcn_codes"/>
+                <field name="is_pos_invoice"/>
+            </xpath>
+            <xpath expr="//div[@name='journal_div']" position="after">
+                <field name="transaction_type_document_out_invoice"
+                       invisible="is_hmk == True or move_type not in ('entry')"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>

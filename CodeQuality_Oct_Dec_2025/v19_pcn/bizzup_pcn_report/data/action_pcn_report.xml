@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="action_pcn_report" model="ir.actions.client">
+            <field name="name">PCN - 874 report - tax</field>
+            <field name="tag">account_report</field>
+            <field name="context" eval="{'report_id': ref('bizzup_pcn_report.pcn_report')}"/>
+        </record>
+
+        <menuitem id="menu_action_account_report_income" name="PCN Tax Report" action="action_pcn_report"
+                  parent="account.account_reports_legal_statements_menu" groups="account.group_account_readonly"/>
+    </data>
+</odoo>

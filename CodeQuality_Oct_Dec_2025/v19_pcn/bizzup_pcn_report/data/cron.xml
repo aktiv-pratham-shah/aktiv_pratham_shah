@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--  Cron Jobs  -->
+    <record id="pcn_codes_assign_cron" model="ir.cron">
+        <field name="name">PCN Codes Assign Cron</field>
+        <field name="model_id" ref="model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">model._pcn_assignment_cron()</field>
+        <field name='interval_number'>1</field>
+        <field name='interval_type'>days</field>
+    </record>
+
+    <record id="pos_entry_update" model="ir.cron">
+        <field name="name">Update POS Entry</field>
+        <field name="model_id" ref="model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">model._update_pos_receipt()</field>
+        <field name='interval_number'>1</field>
+        <field name="active" eval="False"/>
+        <field name='interval_type'>days</field>
+    </record>
+
+</odoo>
