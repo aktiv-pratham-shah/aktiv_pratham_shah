@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="pcn_all_data">
+        <t t-foreach="docs_list" t-as="doc">
+            <t t-esc="doc.get('entry_type')"/>
+            <t t-esc="doc.get('customer_vat_id')"/>
+            <t t-esc="doc.get('submit_date')"/>
+            <t t-esc="doc.get('report_type')"/>
+            <t t-esc="doc.get('file_generation_date')"/>
+            <t t-esc="doc.get('total_untaxed_amount')"/>
+            <t t-esc="doc.get('total_tax_amount')"/>
+            <t t-esc="doc.get('taxable_different_rate_exclude_vat')"/>
+            <t t-esc="doc.get('taxable_different_rate_only_vat')"/>
+            <t t-esc="doc.get('deals_entries_count')"/>
+            <t t-esc="doc.get('exempt_sales')"/>
+            <t t-esc="doc.get('other_inputs_sales')"/>
+            <t t-esc="doc.get('equipment_inputs_sales')"/>
+            <t t-esc="doc.get('tsuma_entries_count')"/>
+            <t t-esc="doc.get('total_vat_due')"/>
+            <t t-esc="'!@#*^$'"/>
+            <t t-esc="doc.get('transaction_entry_type')"/>
+            <t t-esc="doc.get('partner_vat')"/>
+            <t t-esc="doc.get('entry_date')"/>
+            <t t-esc="doc.get('reference_group')"/>
+            <t t-esc="doc.get('reference_number')"/>
+            <t t-esc="doc.get('amount_taxed')"/>
+            <t t-esc="doc.get('amount_untaxed')"/>
+            <t t-esc="doc.get('future_data')"/>
+            <t t-esc="'!@#*^$'"/>
+        </t>
+        <t t-foreach="closing_entry" t-as="close">
+            <t t-esc="close.get('closing_entry_type')"/>
+            <t t-esc="close.get('closing_company_vat_id')"/>
+            <t t-esc="'!@#*^$'"/>
+        </t>
+    </template>
+    <template id="pcn_dat_file">
+        <p>
+            <t t-call="bizzup_pcn_report.pcn_all_data"/>
+        </p>
+    </template>
+
+</odoo>
