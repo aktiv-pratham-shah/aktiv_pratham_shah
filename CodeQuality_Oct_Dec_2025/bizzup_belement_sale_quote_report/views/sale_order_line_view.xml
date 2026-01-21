@@ -1,0 +1,17 @@
+<odoo>
+    <record id="view_order_form_inherit_belement_image" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.belement.image</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Insert the field after the 'name' column in the order_line tree -->
+            <xpath expr="//page[@name='order_lines']//field[@name='order_line']//list//field[@name='product_template_id']" position="after">
+                <field name="belement_image" widget="image" class="oe_avatar" column_invisible="parent.is_belement == False"/>
+                <field name="belement_description" column_invisible="parent.is_belement == False" optional="show"/>
+                <!--Ticket : HT01791-->
+                <field name="report_row_number" column_invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

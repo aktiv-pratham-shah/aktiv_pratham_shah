@@ -1,0 +1,236 @@
+<odoo>
+
+    <!-- Hide Pickup and Return Receipt for Belement -->
+    <record id="sale_renting.action_report_rental_saleorder" model="ir.actions.report">
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="domain">[('is_belement', '=', False)]</field>
+    </record>
+
+    <!-- Hide PDF Quote (standard) for Belement -->
+    <record id="sale.action_report_saleorder" model="ir.actions.report">
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="domain">[('is_belement', '=', False)]</field>
+    </record>
+
+    <!-- Hide PRO-FORMA Invoice for Belement -->
+    <record id="sale.action_report_pro_forma_invoice" model="ir.actions.report">
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="domain">[('is_belement', '=', False)]</field>
+    </record>
+
+    <!-- Hide Quotation / Order for B2C for Belement -->
+    <record id="bizzup_sale_report_customization.action_report_saleorder_raw_for_b2c" model="ir.actions.report">
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="domain">[('is_belement', '=', False)]</field>
+    </record>
+
+    <!-- Hide Timesheets Report for Belement -->
+    <record id="sale_timesheet.timesheet_report_sale_order" model="ir.actions.report">
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="domain">[('is_belement', '=', False)]</field>
+    </record>
+
+    <!--
+        Belement Custom Quote Report Section:
+        Displays Environmental Lab Testing details for Sale Orders
+        belonging to the Belement company only.
+    -->
+    <template id="report_saleorder_document_belement" inherit_id="sale.report_saleorder_document">
+
+
+        <xpath expr="//table" position="before">
+
+            <!-- Check if any environmental lab testing fields exist -->
+            <t t-if="doc.is_belement and doc.add_env_lab_testing">
+                <table class="table table-condensed"
+                       style="border:1px solid black; width:100%; border-collapse:collapse; margin-top:10px;">
+                    <tr style="background-color: #d3d3d3;">
+                        <th colspan="7" style="padding:6px; text-align:center; border:1px solid black;">
+                            Environmental Lab testing issue:
+                        </th>
+                    </tr>
+
+                    <!-- Catalog No & Rev & UUT Qty -->
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; width:15%; background-color: #d3d3d3;">Catalog
+                            No.
+                        </td>
+                        <td style="border:1px solid black; padding:5px; width:10%;">
+                            <span t-field="doc.catalog_no"/>
+                            <t t-if="not doc.catalog_no">N/A</t>
+                        </td>
+                        <td style="border:1px solid black; padding:5px; width:8%;">Rev</td>
+                        <td style="border:1px solid black; padding:5px; width:8%;">-</td>
+                        <td style="border:1px solid black; padding:5px; width:10%; background-color: #d3d3d3;">UUT Qty
+                        </td>
+                        <td style="border:1px solid black; padding:5px; width:10%;">
+                            <span t-field="doc.uut_qty"/>
+                        </td>
+                        <td rowspan="6"
+                            style="border:1px solid black; padding:5px; width:39%; text-align:center; vertical-align:middle;">
+                            <t t-if="doc.picture">
+                                <img t-att-src="image_data_uri(doc.picture)"
+                                     style="max-width:100%; max-height:200px;"/>
+                            </t>
+                        </td>
+                    </tr>
+
+                    <!-- Serial No & UUT Name -->
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; background-color: #d3d3d3;">Serial No.</td>
+                        <td colspan="3" style="border:1px solid black; padding:5px;">
+                            <span t-field="doc.serial_no"/>
+                            <t t-if="not doc.serial_no">N/A</t>
+                        </td>
+                        <!--                        <td colspan="2" style="border:1px solid black; padding:5px;"></td>-->
+                        <td style="border:1px solid black; padding:5px; background-color: #d3d3d3;">UUT Name</td>
+                        <td style="border:1px solid black; padding:5px;">
+                            <span t-field="doc.uut_name"/>
+                        </td>
+                    </tr>
+
+                    <!-- General Dimension - X Depth -->
+                    <tr>
+                        <td rowspan="3"
+                            style="border:1px solid black; padding:5px; vertical-align:middle; background-color: #d3d3d3;">
+                            General
+                            Dimension
+                        </td>
+                        <td style="border:1px solid black; padding:1px;">Depth</td>
+                        <td style="border:1px solid black; padding:5px;">
+                            <span t-field="doc.dimension_x"/>
+                            <t t-if="not doc.dimension_x">-</t>
+                        </td>
+                        <td colspan="1" style="border:1px solid black; padding:5px;">
+                            <span t-esc="doc.uom_dimension.name if doc.uom_dimension else 'mm'"/>
+                        </td>
+                        <td colspan="2" style="border:1px solid black; padding:5px;"></td>
+                    </tr>
+
+                    <!-- General Dimension - Y Width -->
+                    <tr>
+                        <td style="border:1px solid black; padding:1px;">Width</td>
+                        <td style="border:1px solid black; padding:5px;">
+                            <span t-field="doc.dimension_y"/>
+                            <t t-if="not doc.dimension_y">-</t>
+                        </td>
+                        <td colspan="1" style="border:1px solid black; padding:5px;">
+                            <span t-esc="doc.uom_dimension.name if doc.uom_dimension else 'mm'"/>
+                        </td>
+                        <td colspan="2" style="border:1px solid black; padding:5px;"></td>
+                    </tr>
+
+                    <!-- General Dimension - Z Height -->
+                    <tr>
+                        <td style="border:1px solid black; padding:1px;">Height</td>
+                        <td style="border:1px solid black; padding:5px;">
+                            <span t-field="doc.dimension_z"/>
+                            <t t-if="not doc.dimension_z">-</t>
+                        </td>
+                        <td colspan="1" style="border:1px solid black; padding:5px;">
+                            <span t-esc="doc.uom_dimension.name if doc.uom_dimension else 'mm'"/>
+                        </td>
+                        <td colspan="2" style="border:1px solid black; padding:5px;"></td>
+                    </tr>
+
+                    <!-- Weight -->
+                    <tr>
+                        <td style="border:1px solid black; padding:5px; background-color: #d3d3d3;">Weight</td>
+                        <td colspan="2" style="border:1px solid black; padding:5px;">
+                            <span t-field="doc.weight"/>
+                            <t t-if="not doc.weight">-</t>
+                        </td>
+                        <td colspan="1" style="border:1px solid black; padding:5px;">
+                            <span t-esc="doc.uom_weight.name if doc.uom_weight else 'Kg'"/>
+                        </td>
+                        <td colspan="2" style="border:1px solid black; padding:5px;"></td>
+                    </tr>
+                </table>
+                <!-- Force page break after Environmental table so main table starts on new page -->
+                <div style="page-break-before: always;"></div>
+            </t>
+        </xpath>
+        <xpath expr="//th[@name='th_taxes']" position="attributes">
+            <attribute name="class">d-none</attribute>
+        </xpath>
+
+        <xpath expr="//td[@name='td_taxes']" position="attributes">
+            <attribute name="t-att-class">'d-none'</attribute>
+        </xpath>
+
+        <xpath expr="//th[@name='th_subtotal']" position="before">
+            <th name="th_lead_time" t-if="not doc.is_belement" class="text-end text-nowrap">Lead Time</th>
+        </xpath>
+
+        <xpath expr="//td[@name='td_subtotal']" position="before">
+            <td name="td_lead_time" t-if="not doc.is_belement" class="text-end text-nowrap">
+                <t t-esc="line.product_template_id.sale_delay"/>
+            </td>
+        </xpath>
+
+        <!--Added Product Image Column -->
+        <xpath expr="//td[@name='td_name']" position="attributes">
+            <attribute name="style">
+                width:200px; padding:8px;
+                page-break-inside:avoid; page-break-before:auto; page-break-after:auto;
+                word-wrap:break-word; white-space:normal;
+            </attribute>
+        </xpath>
+
+        <!-- Hide standard description content if belement -->
+        <xpath expr="//td[@name='td_name']/span[@t-field='line.name']" position="attributes">
+             <attribute name="t-if">not doc.is_belement</attribute>
+        </xpath>
+
+        <!-- Add belement_description to description column -->
+        <xpath expr="//td[@name='td_name']" position="inside">
+            <span t-if="doc.is_belement" t-field="line.belement_description"/>
+        </xpath>
+
+        <!-- Added Product Column -->
+        <xpath expr="//th[@name='th_description']" position="before">
+            <th name="th_product_belement" t-if="doc.is_belement" class="text-start" style="width: 250px;">Method</th>
+        </xpath>
+        <xpath expr="//td[@name='td_name']" position="before">
+            <td name="td_product_belement" t-if="doc.is_belement" class="text-start" style="width: 250px;">
+                <span t-field="line.name"/>
+            </td>
+        </xpath>
+
+        <!-- Modify Description Column to include Image -->
+        <xpath expr="//td[@name='td_name']" position="inside">
+            <t t-if="doc.is_belement">
+                <t t-if="line.belement_image">
+                    <br/>
+                    <div style="width:300px; height:150px; margin-top:10px;
+                                border:1px solid #ccc; border-radius:8px;
+                                overflow:hidden; display:flex;
+                                justify-content:center; align-items:center;
+                                background-color:#fff;
+                                page-break-inside:avoid; page-break-before:auto; page-break-after:auto;">
+                        <img t-att-src="image_data_uri(line.belement_image)"
+                             style="width:100%; height:100%; object-fit:contain;
+                                    display:block; border:none; margin:0; padding:0;
+                                    page-break-inside:avoid;"/>
+                    </div>
+                </t>
+                <t t-if="not line.belement_description and not line.belement_image">
+                    <p class="text-center">-</p>
+                </t>
+            </t>
+        </xpath>
+
+
+        <xpath expr="//div[@id='informations']/div[@name='informations_reference']" position="after">
+            <div t-if="doc.customer_reference" class="col" name="customer_reference">
+                <strong>Customer Reference</strong>
+                <div t-field="doc.customer_reference"/>
+            </div>
+            <div t-if="doc.commitment_date" class="col" name="commitment_date">
+                <strong>Delivery Date</strong>
+                <div t-field="doc.commitment_date" t-options='{"widget": "date"}'/>
+            </div>
+        </xpath>
+
+    </template>
+</odoo>

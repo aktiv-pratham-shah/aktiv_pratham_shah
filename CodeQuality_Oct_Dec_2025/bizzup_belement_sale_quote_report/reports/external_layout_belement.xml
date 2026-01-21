@@ -1,0 +1,62 @@
+<odoo>
+    <template id="external_layout_standard_belement" inherit_id="web.external_layout_boxed">
+        <xpath expr="//img[@t-if='company.logo']/parent::div" position="after">
+
+            <!-- Custom Belement Header for Belement Sale Orders -->
+            <div class="d-flex justify-content-between align-items-center mb-2"
+                 t-if="(xmlid == 'sale.report_saleorder' or xmlid == 'sale.report_saleorder_raw') and o.is_belement">
+
+                <!-- Left Logo -->
+                <div>
+                    <img t-if="company.header_logo"
+                         t-att-src="image_data_uri(company.header_logo)"
+                         alt="Left Logo"
+                         style="max-height: 120px;"/>
+                </div>
+
+                <!-- Center Text -->
+                <div class="text-center" style="flex-grow: 1;">
+                    <h5 class="mb-0 fw-bold fs-4">Confidential - Client Privileged</h5>
+                </div>
+
+                <!-- Right Logo -->
+                <div>
+                    <img t-if="company.header_logo_2"
+                         t-att-src="image_data_uri(company.header_logo_2)"
+                         alt="Right Logo"
+                         style="max-height: 120px;"/>
+                </div>
+            </div>
+
+            <!-- Default Odoo Header Fallback for Other Reports -->
+            <div class="d-flex justify-content-between align-items-center mb-2" t-else="">
+                <!-- Default Logo -->
+                <img t-if="company.logo"
+                     class="o_company_logo_small"
+                     t-att-src="image_data_uri(company.logo)"
+                     alt="Logo"/>
+
+                <!-- Default Tagline (Company Header) -->
+                <div t-if="company.report_header"
+                     t-field="company.report_header"
+                     class="o_company_tagline mw-50 fw-bold">
+                </div>
+            </div>
+
+        </xpath>
+
+        <!--
+            STEP 2:
+            Hide the original Odoo header to avoid duplication.
+            We don’t remove it — just hide it to preserve DOM structure for stability.
+        -->
+        <xpath expr="//img[@t-if='company.logo']/parent::div" position="attributes">
+            <attribute name="class" add="d-none" separator=" "/>
+        </xpath>
+        <xpath expr="//div[@name='company_address']" position="attributes">
+            <attribute name="style">
+                margin-bottom: 20px;
+            </attribute>
+        </xpath>
+    </template>
+</odoo>

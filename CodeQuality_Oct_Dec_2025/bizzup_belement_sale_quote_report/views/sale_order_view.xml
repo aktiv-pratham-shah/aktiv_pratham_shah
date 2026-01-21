@@ -1,0 +1,35 @@
+<!-- views/sale_order_views.xml -->
+
+<odoo>
+    <record id="view_order_form_inherit_belement" model="ir.ui.view">
+        <field name="name">sale.order.form.belement</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Environmental Lab Testing" invisible="show_lab_testing_tab == False">
+                    <group>
+                        <field name="add_env_lab_testing"/>
+                        <field name="catalog_no" placeholder="-"/>
+                        <field name="serial_no" placeholder="-"/>
+                        <field name="uut_qty" placeholder="e.g. ~8"/>
+                        <field name="uut_name"/>
+                    </group>
+                    <group string="General Dimension">
+                        <field name="dimension_x"/>
+                        <field name="dimension_y"/>
+                        <field name="dimension_z"/>
+                        <field name="uom_dimension"/>
+                    </group>
+                    <group string="Weight">
+                        <field name="weight"/>
+                        <field name="uom_weight"/>
+                    </group>
+                    <group string="Picture">
+                        <field name="picture" widget="image" options="{'preview_image': 'picture'}"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
