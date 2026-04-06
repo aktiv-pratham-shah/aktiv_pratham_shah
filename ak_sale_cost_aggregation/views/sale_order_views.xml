@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_cost_aggregation" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.cost.aggregation</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Individual Cost to the line list view -->
+            <xpath expr="//field[@name='order_line']/list//field[@name='purchase_price']" position="before">
+                <field name="individual_cost" string="Individual Cost" optional="show"/>
+            </xpath>
+
+            <!-- Add Individual Cost to the line form view -->
+            <xpath expr="//field[@name='order_line']/form//field[@name='purchase_price']" position="before">
+                <field name="individual_cost" string="Individual Cost"/>
+            </xpath>
+
+            <!-- Rename and hide the base purchase_price from the list view to reduce confusion -->
+            <xpath expr="//field[@name='order_line']/list//field[@name='purchase_price']" position="attributes">
+                <attribute name="string">Effective Cost (Margin)</attribute>
+                <attribute name="optional">hide</attribute>
+            </xpath>
+
+            <!-- Rename and hide the base purchase_price from the form view -->
+            <xpath expr="//field[@name='order_line']/form//field[@name='purchase_price']" position="attributes">
+                <attribute name="string">Effective Cost (Margin)</attribute>
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sale_order_tree_inherit_product_preview" model="ir.ui.view">
+        <field name="name">sale.order.tree.product.preview</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+
+            <!-- Add after customer -->
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="product_preview" string="Products"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

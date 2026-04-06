@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="margin_intelligence_view.Dashboard">
+        <div class="o_margin_dashboard">
+            <!-- Header: Tab switcher and Filter -->
+            <div class="o_margin_header">
+                <div class="o_margin_tabs">
+                    <button class="o_margin_tab" t-att-class="state.activeTab === 'sale' ? 'active' : ''" t-on-click="() => this.switchTab('sale')">Sale Orders</button>
+                    <button class="o_margin_tab" t-att-class="state.activeTab === 'purchase' ? 'active' : ''" t-on-click="() => this.switchTab('purchase')">Purchase Orders</button>
+                </div>
+                
+                <div class="o_margin_controls">
+                    <select class="o_margin_filter" t-model="state.filter">
+                        <option value="all">All Health</option>
+                        <option value="good">Good (≥30%)</option>
+                        <option value="warning">Warning (10% - 30%)</option>
+                        <option value="critical">Critical (&lt;10%)</option>
+                    </select>
+                    <button class="o_margin_refresh" t-on-click="loadData">
+                        <i class="fa fa-refresh" t-att-class="state.loading ? 'fa-spin' : ''"/> Refresh
+                    </button>
+                    <button class="o_margin_export" t-on-click="exportToExcel">
+                        <i class="fa fa-file-excel-o"/> Export
+                    </button>
+                    <button class="o_margin_group" t-on-click="toggleGrouping" t-att-class="state.groupByCategory ? 'active' : ''">
+                        <i class="fa fa-object-group"/> Group by Category
+                    </button>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="o_margin_kpi_row">
+                <div class="o_margin_kpi_card">
+                    <div class="o_kpi_label">Avg Margin %</div>
+                    <div class="o_kpi_value"><t t-esc="state.kpis.avgMargin"/>%</div>
+                </div>
+                <div class="o_margin_kpi_card kpi_good">
+                    <div class="o_kpi_label">Good Items</div>
+                    <div class="o_kpi_value"><t t-esc="state.kpis.goodCount"/></div>
+                </div>
+                <div class="o_margin_kpi_card kpi_warning">
+                    <div class="o_kpi_label">Warning Items</div>
+                    <div class="o_kpi_value"><t t-esc="state.kpis.warningCount"/></div>
+                </div>
+                <div class="o_margin_kpi_card kpi_critical">
+                    <div class="o_kpi_label">Critical Items</div>
+                    <div class="o_kpi_value"><t t-esc="state.kpis.criticalCount"/></div>
+                </div>
+                <div class="o_margin_kpi_card">
+                    <div class="o_kpi_label">Total Margin Amount</div>
+                    <div class="o_kpi_value"><t t-esc="state.kpis.totalMargin"/></div>
+                </div>
+            </div>
+
+            <!-- Top/Bottom 5 Analysis -->
+            <div class="o_margin_analysis_row" t-if="!state.loading and state.kpis.top5.length">
+                <div class="o_analysis_card">
+                    <div class="o_analysis_title text-success"><i class="fa fa-trophy"/> Top 5 Products</div>
+                    <div class="o_analysis_list">
+                        <div t-foreach="state.kpis.top5" t-as="item" t-key="item.name" class="o_analysis_item">
+                            <span class="product_name" t-esc="item.name"/>
+                            <span class="product_pct text-success"><t t-esc="item.pct"/>%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="o_analysis_card">
+                    <div class="o_analysis_title text-danger"><i class="fa fa-exclamation-triangle"/> Bottom 5 Products</div>
+                    <div class="o_analysis_list">
+                        <div t-foreach="state.kpis.bottom5" t-as="item" t-key="item.name" class="o_analysis_item">
+                            <span class="product_name" t-esc="item.name"/>
+                            <span class="product_pct text-danger"><t t-esc="item.pct"/>%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Table Content -->
+            <div class="o_margin_table_container">
+                <table class="o_margin_table" t-if="!state.loading and filteredLines.length">
+                    <thead>
+                        <tr>
+                            <th t-on-click="() => this.sort('order_name')">Order <i t-att-class="state.sortField === 'order_name' ? (state.sortOrder === 'asc' ? 'fa fa-sort-asc' : 'fa fa-sort-desc') : 'fa fa-sort'"/></th>
+                            <th t-on-click="() => this.sort('product_name')">Product <i t-att-class="state.sortField === 'product_name' ? (state.sortOrder === 'asc' ? 'fa fa-sort-asc' : 'fa fa-sort-desc') : 'fa fa-sort'"/></th>
+                            <th class="text-end" t-on-click="() => this.sort('price')">
+                                <t t-if="state.activeTab === 'sale'">Sale Price</t>
+                                <t t-else="">Purchase Price</t>
+                                <i t-att-class="state.sortField === 'price' ? (state.sortOrder === 'asc' ? 'fa fa-sort-numeric-asc' : 'fa fa-sort-numeric-desc') : 'fa fa-sort'"/>
+                            </th>
+                            <th class="text-end" t-on-click="() => this.sort('cost_or_ref')">
+                                <t t-if="state.activeTab === 'sale'">Cost</t>
+                                <t t-else="">Sale Ref</t>
+                                <i t-att-class="state.sortField === 'cost_or_ref' ? (state.sortOrder === 'asc' ? 'fa fa-sort-numeric-asc' : 'fa fa-sort-numeric-desc') : 'fa fa-sort'"/>
+                            </th>
+                            <th class="text-end" t-on-click="() => this.sort('margin_amt')">Margin Amount <i t-att-class="state.sortField === 'margin_amt' ? (state.sortOrder === 'asc' ? 'fa fa-sort-numeric-asc' : 'fa fa-sort-numeric-desc') : 'fa fa-sort'"/></th>
+                            <th style="width: 280px" t-on-click="() => this.sort('margin_pct')">Margin % <i t-att-class="state.sortField === 'margin_pct' ? (state.sortOrder === 'asc' ? 'fa fa-sort-numeric-asc' : 'fa fa-sort-numeric-desc') : 'fa fa-sort'"/></th>
+                            <th class="text-center">Health</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="groupedData" t-as="group" t-key="group.name || 'flat'">
+                            <tr t-if="group.isGroup" class="o_margin_group_header">
+                                <td colspan="7">
+                                    <span class="group_name" t-esc="group.name"/>
+                                    <span class="group_stats ms-2 text-muted small">(<t t-esc="group.count"/> items, Avg Margin: <t t-esc="group.avg"/>%)</span>
+                                </td>
+                            </tr>
+                            <tr t-foreach="group.lines" t-as="line" t-key="line.id">
+                                <td><t t-esc="line.order_name"/></td>
+                                <td><t t-esc="line.product_name"/></td>
+                                <td class="text-end"><t t-esc="line.price.toFixed(2)"/></td>
+                                <td class="text-end"><t t-esc="line.cost_or_ref.toFixed(2)"/></td>
+                                <td class="text-end fw-bold"><t t-esc="line.margin_amt.toFixed(2)"/></td>
+                                <td>
+                                    <div class="o_margin_cell_pct">
+                                        <div class="o_margin_bar_container">
+                                            <div class="o_margin_bar" t-att-class="'bg-' + line.health" t-attf-style="width: {{Math.max(0, Math.min(100, line.margin_pct))}}%"></div>
+                                            <span class="o_margin_pct_text"><t t-esc="line.margin_pct.toFixed(2)"/>%</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <span class="o_margin_badge" t-att-class="'badge-' + line.health">
+                                        <t t-esc="line.health.charAt(0).toUpperCase() + line.health.slice(1)"/>
+                                    </span>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+                <!-- Loading Spinner -->
+                <div class="o_margin_loader" t-if="state.loading">
+                    <i class="fa fa-spinner fa-spin fa-3x"/>
+                    <p>Fetching margin intelligence data...</p>
+                </div>
+
+                <!-- Empty State -->
+                <div class="o_margin_empty" t-if="!state.loading and !filteredLines.length">
+                    <i class="fa fa-line-chart fa-3x"/>
+                    <h3>No Data Available</h3>
+                    <p>There are no confirmed order lines for the current selection.</p>
+                </div>
+            </div>
+
+            <!-- Legend/Footer -->
+            <div class="o_margin_footer">
+                <div class="o_margin_legend">
+                    <strong>Legend:</strong>
+                    <span class="legend-item"><span class="legend-box bg-good"/> Good (≥30%)</span>
+                    <span class="legend-item"><span class="legend-box bg-warning"/> Warning (10%-30%)</span>
+                    <span class="legend-item"><span class="legend-box bg-critical"/> Critical (＜10%)</span>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

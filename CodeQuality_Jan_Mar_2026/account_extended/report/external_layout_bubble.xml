@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+  <template id="external_layout_bubble_inherit" inherit_id="web.external_layout_bubble">
+    <xpath position="before" expr="/t[@t-name='web.external_layout_bubble']/div[3]/{http://www.w3.org/2000/svg}svg" meta-t-attf-class="{{report_type == 'pdf' and 'position-fixed start-0'}}" meta-width="500" meta-height="228" meta-viewBox="0 0 500 228" meta-fill="none">
+      <t t-if="company.country_id.code == 'IN'">
+          <div class="text-center">
+            <span style="font-size: 10px;">(SUPPLY MEANT FOR EXPORT/SUPPLY TO SEZ UNIT OR SEZ DEVELOPER FOR AUTHORISED
+    OPERATIONS UNDER BOND OR LETTER OF UNDERTAKING WITHOUT PAYMENT OF IGST)</span>
+          </div>
+      </t>
+    </xpath>
+    <xpath expr="//t[@t-name='web.external_layout_bubble']//tr/td[@class='p-0 text-end']/img" position="replace">
+</xpath>
+<xpath expr="//t[@t-name='web.external_layout_bubble']//td[@t-if='company.report_header']/span" position="before">
+    <img t-if="company.logo"
+         class="o_company_logo mb-2"
+         t-att-src="image_data_uri(company.logo)"
+         alt="Logo"/>
+</xpath>
+  </template>
+</odoo>

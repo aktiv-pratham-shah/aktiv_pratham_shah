@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="remove_untaxed_and_taxes_lines" inherit_id="account.document_tax_totals_template">
+
+        <!-- Hide the SUBTOTAL row only for Indian account.move -->
+        <xpath expr="//tr[contains(@class,'o_subtotal')]" position="attributes">
+          <attribute name="t-if">not (o and o._name == 'account.move')</attribute>
+        </xpath>
+
+        <!-- Hide all TAX rows only for Indian account.move -->
+        <xpath expr="//tr[contains(@class,'o_taxes')]" position="attributes">
+          <attribute name="t-if">not (o and o._name == 'account.move')</attribute>
+        </xpath>
+
+
+        <xpath expr="//tr[@class='o_total']" position="before">
+            <!--Total amount with all taxes-->
+            <t t-if="o and o._name == 'account.move' and o.company_id  and o.company_id.account_fiscal_country_id.code == 'IN' and o.company_id.currency_id">
+                <tr class="o_subtotal">
+                    <td><strong>Total in INR</strong></td>
+                    <td class="text-end">
+                        <strong t-field="o.amount_total_signed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.company_id.currency_id}">31.05</strong>
+                    </td>
+                </tr>
+            </t>
+        </xpath>
+    </template>
+</odoo>

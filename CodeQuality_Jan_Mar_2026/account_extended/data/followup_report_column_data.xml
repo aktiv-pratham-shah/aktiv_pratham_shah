@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Detach the Amount column-->
+    <record id="account_reports.followup_report_amount" model="account.report.column">
+        <field name="report_id" eval="False"/>
+    </record>
+
+    <!-- Detach the Balance (Total Due) column -->
+    <record id="account_reports.followup_report_report_balance" model="account.report.column">
+        <field name="report_id" eval="False"/>
+    </record>
+
+    <!-- Configure Amount Currency to show the Balance (Total) instead -->
+    <record id="account_reports.followup_report_report_amount_currency" model="account.report.column">
+        <field name="figure_type">monetary</field>
+        <field name="blank_if_zero" eval="False"/>
+    </record>
+</odoo>

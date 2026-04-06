@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+
+
+    <!-- Update the mail.template of payment reminder -->
+    <function model="mail.template" name="write">
+      <value eval="[ref('account_followup.email_template_followup_1')]"/>
+      <value eval="{ 'email_cc': '''{{ ','.join([p.email for p in object.message_partner_ids if p.email]) }}''',
+            'body_html': '''&lt;div style=&quot;margin: 0px; padding: 0px;&quot; data-oe-version=&quot;1.2&quot;&gt;
+          &lt;p style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;&quot;&gt;
+            Hello Team,
+          &lt;/p&gt;
+          &lt;p style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;&quot;&gt;
+            We hope this message finds you well, and we truly appreciate your continued partnership.&amp;nbsp;
+          &lt;/p&gt;
+          &lt;p style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;&quot;&gt;
+            We would like to inform you that your account currently reflects an outstanding balance of &amp;nbsp;
+            &lt;b style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;font-weight:bolder;&quot;&gt;
+              &lt;t t-if=&quot;object.unpaid_invoice_ids&quot; t-out=&quot;format_amount(sum(object.unpaid_invoice_ids.mapped('amount_residual')), object.unpaid_invoice_ids[0].currency_id) or ''&quot;&gt;&lt;/t&gt;
+            &lt;/b&gt;.
+            We kindly request that this amount be settled within the next &amp;nbsp;
+            &lt;b style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;font-weight:bolder;&quot;&gt;7 days&lt;/b&gt;.
+          &lt;/p&gt;
+          &lt;p t-if=&quot;object._show_pay_now_button()&quot; style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;&quot;&gt;
+            &lt;a t-att-href=&quot;'/my/invoices/overdue'&quot; style=&quot;color: #374151; margin: 0px; box-sizing: border-box; padding: 8px 12px; font-size: 12px; text-decoration: none; font-weight: 400; background-color: #875a7b; border: 0px solid #875a7b; border-radius: 3px;&quot;&gt;
+              &lt;font style=&quot;color: #ffffff;&quot;&gt;Pay now&lt;/font&gt;
+            &lt;a&gt;
+          &lt;/p&gt;
+          &lt;p style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;&quot;&gt;
+            Due Invoices are :
+          &lt;/p&gt;
+          &lt;p style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;&quot;&gt;
+            If you have already processed the payment, please disregard this message. Otherwise, we would appreciate your prompt attention to this matter and request that the outstanding invoices be cleared at your earliest convenience.
+          &lt;/p&gt;
+          &lt;p style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;&quot;&gt;
+            If you have any questions or require assistance, please don’t hesitate to contact our accounting department.
+          &lt;/p&gt;
+          &lt;p style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;&quot;&gt;
+            Best Regards,&amp;nbsp;
+          &lt;/p&gt;
+          &lt;p style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;&quot;&gt;
+            &lt;t t-if=&quot;not is_html_empty(object._get_followup_responsible().signature)&quot;&gt;
+              &lt;t t-out=&quot;object._get_followup_responsible().signature&quot;&gt;&lt;/t&gt;
+            &lt;/t&gt;
+            &lt;t t-else=&quot;&quot;&gt;
+              &lt;t t-out=&quot;object._get_followup_responsible().name&quot;&gt;&lt;/t&gt;
+            &lt;/t&gt;
+          &lt;/p&gt;
+           &lt;/div&gt;'''}"/>
+    </function>
+
+
+
+
+ <!-- Update the mail.template second email reminder -->
+    <function model="mail.template" name="write">
+      <value eval="[ref('account_followup.demo_followup_email_template_2')]"/>
+      <value eval="{
+                'body_html': '''&lt;div style=&quot;margin: 0px; padding: 0px;&quot; data-oe-version=&quot;1.2&quot;&gt;
+                  &lt;p style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;&quot;&gt;
+                    Dear Team,&lt;br/&gt;&lt;br/&gt;
+                  &lt;/p&gt;
+
+              &lt;p style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;&quot;&gt;
+                I hope this message finds you well.
+              &lt;/p&gt;
+
+              &lt;p style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;&quot;&gt;
+                This is a gentle follow-up regarding the open invoices, which, as per our records, remains unpaid.
+                This is our &lt;strong style=&quot;font-weight:bolder;color:red;&quot;&gt;second reminder&lt;/strong&gt;, and we kindly request that the payment be settled
+                &lt;strong style=&quot;font-weight:bolder;&quot;&gt;immediately&lt;/strong&gt; to avoid any disruption to services.
+              &lt;/p&gt;
+
+              &lt;p style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;&quot;&gt;
+                If the payment has already been made, please disregard this message. Otherwise, we would appreciate it if you could process the payment at your earliest convenience.
+              &lt;/p&gt;
+
+              &lt;p style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0:0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;&quot;&gt;
+                Should you have any questions or require assistance, feel free to reach out.
+              &lt;/p&gt;
+
+              &lt;p style=&quot;border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;&quot;&gt;
+                Best Regards,
+                &lt;t t-if=&quot;not is_html_empty(object._get_followup_responsible().signature)&quot;&gt;
+                  &lt;br/&gt;
+                  &lt;t t-out=&quot;object._get_followup_responsible().signature&quot;&gt;&lt;/t&gt;
+                &lt;/t&gt;
+                &lt;t t-else=&quot;&quot;&gt;
+                  &lt;br/&gt;--&lt;br/&gt;
+                  &lt;t t-out=&quot;object._get_followup_responsible().name&quot;&gt;&lt;/t&gt;
+                &lt;/t&gt;
+              &lt;/p&gt;
+            &lt;/div&gt;'''
+              }"/>
+    </function>
+
+    <!-- New mail.template for third email reminder -->
+    <record id="email_template_followup_3" model="mail.template">
+        <field name="name">Third Payment Reminder</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="subject">{{ (object.company_id or object._get_followup_responsible().company_id).name }} Payment Reminder - {{ object.commercial_company_name }}</field>
+        <field name="email_from">{{ object.company_id.email_formatted or user.email_formatted }}</field>
+        <field name="partner_to">{{ object.id }}</field>
+        <field name="description">Third Payment Reminder</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;" data-oe-version="1.2">
+                <p style="border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;">
+                    Dear Team,<br/><br/>
+                </p>
+
+                <p style="border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;">
+                    I hope this message finds you well.
+                </p>
+
+                <p style="border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;">
+                    This is a gentle follow-up regarding the open invoices, which, as per our records, remains unpaid.
+                    This is our <strong style="font-weight:bolder;color:red;">Third Reminder</strong>, and we kindly request that the payment be settled
+                    <strong style="font-weight:bolder;">immediately</strong> to avoid any disruption to services.
+                </p>
+
+                <p style="border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;">
+                    If the payment has already been made, please disregard this message. Otherwise, we would appreciate it if you could process the payment at your earliest convenience.
+                </p>
+
+                <p style="border-radius:0px;border-style:none;padding:0px;margin:0:0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;">
+                    Should you have any questions or require assistance, feel free to reach out.
+                </p>
+
+                <p style="border-radius:0px;border-style:none;padding:0px;margin:0px 0 16px 0;box-sizing:border-box;border-left-width:0px;border-bottom-width:0px;border-right-width:0px;border-top-width:0px;">
+                    Best Regards,
+                    <t t-if="not is_html_empty(object._get_followup_responsible().signature)">
+                        <br/>
+                        <t t-out="object._get_followup_responsible().signature"/>
+                    </t>
+                    <t t-else="">
+                        <br/>--<br/>
+                        <t t-out="object._get_followup_responsible().name"/>
+                    </t>
+                </p>
+            </div>
+        </field>
+        <field name="lang">{{ object.lang }}</field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+
+</odoo>

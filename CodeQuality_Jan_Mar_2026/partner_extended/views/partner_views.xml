@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_partner_form_inherited" model="ir.ui.view">
+        <field name="name">res.partner.form.inherited</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="string">Tax ID</attribute>
+            </xpath>
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="x_studio_newexisting"/>
+                <field name="x_studio_region_1"/>
+                <field name="x_studio_lead_source"/>
+                <field name="x_studio_customer_type"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
